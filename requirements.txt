@@ -1,0 +1,9 @@
+###### Requirements without Version Specifiers ######
+pandas
+numpy
+statsmodels
+jupyterlab
+ipykernel
+matplotlib
+seaborn
+scikit-learn
