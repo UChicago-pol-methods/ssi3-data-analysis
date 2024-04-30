@@ -36,6 +36,7 @@ drop responseid externalreference assignmentid projectid createnewfieldorchoosef
 
 * Fixing variable names and changing strings to integers
 
+// TODO: Not needed after pilot
 rename v25 party_idr
 rename v26 party_idd
 rename qid74 party_idi
@@ -131,17 +132,17 @@ gen attention_check_2pass = 1*(attention_check_2 == "1,3")
 
 **gender
 ** 0 = prefer not to say
-gen genderNum = 0
-replace genderNum = 0 if sex == "Male"
-replace genderNum = 1 if sex == "Female"
+gen sex_id = 0
+replace sex_id = 0 if sex == "Male"
+replace sex_id = 1 if sex == "Female"
 
 **education level
 ** 0 = prefer not to say
-gen educationNum = 0
-replace educationNum = 1 if education == "Professional degree (for example: MD, DDS, DVM, LLB, JD)"
-replace educationNum = 1 if education == "Bachelor's degree (for example: BA, AB, BS)"
-replace educationNum = 1 if education == "Master's degree (for example: MA, MS, MEng, MEd, MSW, MBA)"
-replace educationNum = 1 if education == "Doctorate degree (for example: PhD, EdD)"
+gen college = 0
+replace college = 1 if education == "Professional degree (for example: MD, DDS, DVM, LLB, JD)"
+replace college = 1 if education == "Bachelor's degree (for example: BA, AB, BS)"
+replace college = 1 if education == "Master's degree (for example: MA, MS, MEng, MEd, MSW, MBA)"
+replace college = 1 if education == "Doctorate degree (for example: PhD, EdD)"
 
 **occupation
 ** 0 = rather not say
@@ -166,29 +167,29 @@ replace occupationNum = 17 if occupationfield == "Other"
 
 **relationship status
 ** 0 = rather not say
-gen relationshipNum = 0
-replace relationshipNum = 1 if relationshipmaritalstatus == "In a civil union/partnership"
-replace relationshipNum = 1 if relationshipmaritalstatus == "Married"
+gen relationship = 0
+replace relationship = 1 if relationshipmaritalstatus == "In a civil union/partnership"
+replace relationship = 1 if relationshipmaritalstatus == "Married"
 
 ** household income
 ** 0 = prefer not to say
-gen income_id = 0
-replace income_id = 0 if householdincome == "Less than $10,000"
-replace income_id = 1 if householdincome == "$10,000-$19,999"
-replace income_id = 2 if householdincome == "$20,000-$29,999"
-replace income_id = 3 if householdincome == "$30,000-$39,999"
-replace income_id = 4 if householdincome == "$40,000-$49,999"
-replace income_id = 5 if householdincome == "$50,000-$59,999"
-replace income_id = 6 if householdincome == "$60,000-$69,999"
-replace income_id = 7 if householdincome == "$70,000-$79,999"
-replace income_id = 8 if householdincome == "$80,000-$89,999"
-replace income_id = 9 if householdincome == "$90,000-$99,999"
-replace income_id = 10 if householdincome == "$100,000-$124,999"
-replace income_id = 15 if householdincome == "$150,0000-$174,999"
-replace income_id = 18 if householdincome == "$175,000-$199,999"
-replace income_id = 20 if householdincome == "$200,000-$224,999"
-replace income_id = 23 if householdincome == "$225,000-$249,999"
-replace income_id = 25 if householdincome == "$250,000 or more"
+gen income_level = 0
+replace income_level = 0 if householdincome == "Less than $10,000"
+replace income_level = 1 if householdincome == "$10,000-$19,999"
+replace income_level = 2 if householdincome == "$20,000-$29,999"
+replace income_level = 3 if householdincome == "$30,000-$39,999"
+replace income_level = 4 if householdincome == "$40,000-$49,999"
+replace income_level = 5 if householdincome == "$50,000-$59,999"
+replace income_level = 6 if householdincome == "$60,000-$69,999"
+replace income_level = 7 if householdincome == "$70,000-$79,999"
+replace income_level = 8 if householdincome == "$80,000-$89,999"
+replace income_level = 9 if householdincome == "$90,000-$99,999"
+replace income_level = 10 if householdincome == "$100,000-$124,999"
+replace income_level = 15 if householdincome == "$150,0000-$174,999"
+replace income_level = 18 if householdincome == "$175,000-$199,999"
+replace income_level = 20 if householdincome == "$200,000-$224,999"
+replace income_level = 23 if householdincome == "$225,000-$249,999"
+replace income_level = 25 if householdincome == "$250,000 or more"
 
 ** race
 ** 0 = prefer not to say / no answer
@@ -204,17 +205,23 @@ gen race_white = 1*(race_id == 7)
 
 ** employment status
 ** 0 = prefer not to say
-gen employment_id = 0
-replace employment_id = 1 if employmentstatus == "Full-time"
+gen employment_status = 0
+replace employment_status = 1 if employmentstatus == "Full-time"
 
-keep treatment party_id party employment_id race_id race_white income_id relationshipNum educationNum genderNum age prosociality  gastax carbtax treaty regcarb political_views scientificconfidence rewardconsequence religiosity economic_reasoning attention_check_1pass attention_check_2pass gastax_after carbtax_after treaty_after regcarb_after
+rename scientificconfidence scientific_confidence
+rename rewardconsequence reward_consequence
+rename political_views ideology
+keep treatment party_id party employment_status race_id race_white income_level relationship college sex_id age prosociality  gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity economic_reasoning attention_check_1pass attention_check_2pass gastax_after carbtax_after treaty_after regcarb_after
+
+
 
 * Other cleaning
-destring scientificconfidence, replace
-destring rewardconsequence, replace
+destring scientific_confidence, replace
+destring reward_consequence, replace
 destring religiosity, replace
 destring economic_reasoning, replace
-destring political_views, replace
+destring ideology, replace
+
 
 * pre- and post-test response
 destring gastax, replace
@@ -227,35 +234,42 @@ destring treaty_after, replace
 destring regcarb_after, replace
 gen post_test = 0
 gen pre_test = 0
-replace post_test = gastax_after + carbtax_after + treaty_after + regcarb_after
-replace pre_test = gastax + carbtax + treaty + regcarb
+replace post_test = (gastax_after + carbtax_after + treaty_after + regcarb_after)/4
+replace pre_test = (gastax + carbtax + treaty + regcarb)/4
 
 
 * Replace missing pre-treatment covariates with mean values
 
 * Loop through each variable in the list
 * List your variables
-local varlist  age party_id employment_id race_white income_id race_white relationshipNum educationNum genderNum  prosociality gastax carbtax treaty regcarb political_views scientificconfidence rewardconsequence religiosity economic_reasoning
-
+local varlist  age party_id employment_status race_white income_level race_white relationship college sex_id  prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity church_freq economic_reasoning
+replace church_freq = 0 if missing(church_freq)
 
 * Loop through each variable in the list
 foreach var of local varlist {
-    * Replace missing values with the mean
+    * Replace other missing values with the mean
     summ `var'
 	replace `var' = r(mean) if missing(`var')
 
 }
 
 * create table
-summarize age party_id employment_id race_white income_id relationshipNum educationNum genderNum prosociality gastax carbtax treaty regcarb political_views scientificconfidence rewardconsequence religiosity economic_reasoning attention_check_1pass attention_check_2pass
+summarize age party_id employment_status race_white income_level relationship college sex_id prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity church_freq economic_reasoning attention_check_1pass attention_check_2pass
 
-estpost summarize age party_id employment_id race_white income_id relationshipNum educationNum genderNum  prosociality gastax carbtax treaty regcarb political_views scientificconfidence rewardconsequence religiosity economic_reasoning attention_check_1pass attention_check_2pass
+estpost summarize age party_id employment_status race_white income_level relationship college sex_id prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity church_freq economic_reasoning attention_check_1pass attention_check_2pass
 
 esttab using "../Datasets/summary_stats.csv", cells("count mean sd min max") nomtitle nonumber noobs replace
 
 
 gen unique_id = _n
-tabulate treatment_value, generate(treatment_)
+
+gen treatment_0 = 1*(treatment_value == "0")
+gen treatment_1 = 1*(treatment_value == "1")
+gen treatment_2 = 1*(treatment_value == "2")
+gen treatment_3 = 1*(treatment_value == "3")
+gen treatment_4 = 1*(treatment_value == "4")
+gen treatment_5 = 1*(treatment_value == "5")
+drop if treatment_value == "6"
 
 * Saving the new dataset
 
