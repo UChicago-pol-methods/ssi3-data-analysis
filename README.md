@@ -1,5 +1,6 @@
 # ssi3-data-analysis
 This repository stores replication files for SOSC 13300 Section 1 Final Project. 
+Registry: https://osf.io/2ztxe
 
 To run the python code, create a virtual environment. 
 

@@ -7,14 +7,14 @@ set more off
 
 * Downloading and saving additional demographic data
 
-import delimited "../Datasets/assignments_2543abfe-e732-42ae-aa3c-e8b451da91c4", clear
+import delimited "../Datasets/assignments_556e59b7-a2b0-402b-a29b-4bc811e68329", clear
 save "../Datasets/SOSC Connect Cloud Research Demographics", replace
 clear
 
 * Importing data from Qualtrics and saving
 
-import delimited "../Datasets/SOSC 13300 Severson and Coleman Extension Survey_April 22, 2024_09.12.csv", varnames(1) clear 
-save "../Datasets/Severson and Coleman Pilot Raw Data", replace
+import delimited "../Datasets/SOSC 13300 Severson and Coleman Extension Survey_May 1, 2024_17.48.csv", varnames(1) clear 
+save "../Datasets/Severson and Coleman Main Raw Data", replace
 
 * Removing unnecessary variables and observations
 
@@ -36,10 +36,9 @@ drop responseid externalreference assignmentid projectid createnewfieldorchoosef
 
 * Fixing variable names and changing strings to integers
 
-// TODO: Not needed after pilot
 rename v25 party_idr
 rename v26 party_idd
-rename qid74 party_idi
+rename v27 party_idi
 destring party_idd, replace
 destring party_idi, replace
 destring party_idr, replace
@@ -52,8 +51,8 @@ replace party_id = 2 if party_idr == 5
 replace party_id = 1 if party_idi == 4
 replace party_id = 0 if party_idi == 3
 replace party_id = -1 if party_idi == 2
-replace party_id = -2 if party_idd == 0
-replace party_id = -3 if party_idd == 1
+replace party_id = -2 if party_idd == 1
+replace party_id = -3 if party_idd == 0
 
 gen party = 0
 replace party = -1 if party_idd == 0 | party_idd == 1 | party_idi == 2
@@ -213,7 +212,11 @@ rename rewardconsequence reward_consequence
 rename political_views ideology
 keep treatment party_id party employment_status race_id race_white income_level relationship college sex_id age prosociality  gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity economic_reasoning attention_check_1pass attention_check_2pass gastax_after carbtax_after treaty_after regcarb_after
 
-
+** rel freq
+gen rel_freq = 1
+replace rel_freq = church_freq if !missing(church_freq)
+replace rel_freq = syn_freq if !missing(syn_freq)
+replace rel_freq = mosque_freq if !missing(mosque_freq)
 
 * Other cleaning
 destring scientific_confidence, replace
@@ -242,8 +245,8 @@ replace pre_test = (gastax + carbtax + treaty + regcarb)/4
 
 * Loop through each variable in the list
 * List your variables
-local varlist  age party_id employment_status race_white income_level race_white relationship college sex_id  prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity church_freq economic_reasoning
-replace church_freq = 0 if missing(church_freq)
+local varlist  age party_id employment_status race_white income_level race_white relationship college sex_id  prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity rel_freq economic_reasoning
+replace rel_freq = 1 if missing(rel_freq)
 
 * Loop through each variable in the list
 foreach var of local varlist {
@@ -254,9 +257,9 @@ foreach var of local varlist {
 }
 
 * create table
-summarize age party_id employment_status race_white income_level relationship college sex_id prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity church_freq economic_reasoning attention_check_1pass attention_check_2pass
+summarize age party_id employment_status race_white income_level relationship college sex_id prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity rel_freq economic_reasoning attention_check_1pass attention_check_2pass
 
-estpost summarize age party_id employment_status race_white income_level relationship college sex_id prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity church_freq economic_reasoning attention_check_1pass attention_check_2pass
+estpost summarize age party_id employment_status race_white income_level relationship college sex_id prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity rel_freq economic_reasoning attention_check_1pass attention_check_2pass
 
 esttab using "../Datasets/summary_stats.csv", cells("count mean sd min max") nomtitle nonumber noobs replace
 
