@@ -124,7 +124,7 @@ replace prosociality = 3 if pro_competitive >=6
 
 
 * Attention checks
-gen attention_check_1pass = 1*(attention_check_1 == "Strongly like")
+gen attention_check_1pass = 1*(attention_check_1 == "1")
 gen attention_check_2pass = 1*(attention_check_2 == "1,3")
 
 **Quantifying variables
@@ -207,16 +207,20 @@ gen race_white = 1*(race_id == 7)
 gen employment_status = 0
 replace employment_status = 1 if employmentstatus == "Full-time"
 
-rename scientificconfidence scientific_confidence
-rename rewardconsequence reward_consequence
-rename political_views ideology
-keep treatment party_id party employment_status race_id race_white income_level relationship college sex_id age prosociality  gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity economic_reasoning attention_check_1pass attention_check_2pass gastax_after carbtax_after treaty_after regcarb_after
 
 ** rel freq
+destring church_freq, replace  
+destring syn_freq, replace
+destring mosque_freq, replace
 gen rel_freq = 1
 replace rel_freq = church_freq if !missing(church_freq)
 replace rel_freq = syn_freq if !missing(syn_freq)
 replace rel_freq = mosque_freq if !missing(mosque_freq)
+
+rename scientificconfidence scientific_confidence
+rename rewardconsequence reward_consequence
+rename political_views ideology
+keep treatment party_id party employment_status race_id race_white income_level relationship college sex_id age prosociality  gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity rel_freq economic_reasoning attention_check_1pass attention_check_2pass gastax_after carbtax_after treaty_after regcarb_after
 
 * Other cleaning
 destring scientific_confidence, replace
@@ -227,14 +231,59 @@ destring ideology, replace
 
 
 * pre- and post-test response
-destring gastax, replace
-destring carbtax, replace
-destring treaty, replace
-destring regcarb, replace
-destring gastax_after, replace
-destring carbtax_after, replace
-destring treaty_after, replace
+gen gastax_n = 0
+replace gastax_n = 0 if gastax == "Strongly Oppose"
+replace gastax_n = 1 if gastax == "Somewhat Oppose"
+replace gastax_n = 2 if gastax == "Somewhat Support"
+replace gastax_n = 3 if gastax == "Strongly Support"
+
+gen carbtax_n = 0
+replace carbtax_n = 0 if carbtax == "Strongly Oppose"
+replace carbtax_n = 1 if carbtax == "Somewhat Oppose"
+replace carbtax_n = 2 if carbtax == "Somewhat Support"
+replace carbtax_n = 3 if carbtax == "Strongly Support"
+
+gen treaty_n = 0
+replace treaty_n = 0 if treaty == "Strongly Oppose"
+replace treaty_n = 1 if treaty == "Somewhat Oppose"
+replace treaty_n = 2 if treaty == "Somewhat Support"
+replace treaty_n = 3 if treaty == "Strongly Support"
+
+gen regcarb_n = 0
+replace regcarb_n = 0 if regcarb == "Strongly Oppose"
+replace regcarb_n = 1 if regcarb == "Somewhat Oppose"
+replace regcarb_n = 2 if regcarb == "Somewhat Support"
+replace regcarb_n = 3 if regcarb == "Strongly Support"
+
+gen gastax_after_n = 0
+replace gastax_after_n = 0 if gastax_after == "Strongly Oppose"
+replace gastax_after_n = 1 if gastax_after == "Somewhat Oppose"
+replace gastax_after_n = 2 if gastax_after == "Somewhat Support"
+replace gastax_after_n = 3 if gastax_after == "Strongly Support"
+
+gen carbtax_after_n = 0
+replace carbtax_after_n = 0 if carbtax_after == "Strongly Oppose"
+replace carbtax_after_n = 1 if carbtax_after == "Somewhat Oppose"
+replace carbtax_after_n = 2 if carbtax_after == "Somewhat Support"
+replace carbtax_after_n = 3 if carbtax_after == "Strongly Support"
+
+gen treaty_after_n = 0
+replace treaty_after_n = 0 if treaty_after == "Strongly Oppose"
+replace treaty_after_n = 1 if treaty_after == "Somewhat Oppose"
+replace treaty_after_n = 2 if treaty_after == "Somewhat Support"
+replace treaty_after_n = 3 if treaty_after == "Strongly Support"
+
+drop carbtax treaty regcarb gastax carbtax_after treaty_after gastax_after
+rename carbtax_n carbtax
+rename treaty_n treaty
+rename regcarb_n regcarb
+rename gastax_n gastax
+rename carbtax_after_n carbtax_after
+rename treaty_after_n treaty_after
+rename gastax_after_n gastax_after
 destring regcarb_after, replace
+
+
 gen post_test = 0
 gen pre_test = 0
 replace post_test = (gastax_after + carbtax_after + treaty_after + regcarb_after)/4
