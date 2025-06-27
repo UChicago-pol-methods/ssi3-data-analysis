@@ -1,0 +1,27 @@
+\begin{table*}
+
+\caption{Mean average treatment effect estimates by fold. \label{tab:fold_estimates}}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{lcccccc}
+\toprule
+Treatment & Fold 0 & Fold 1 & Fold 2 & Fold 3 & Fold 4 & Fold average\\
+\cmidrule(lr){2-2} \cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6} \cmidrule(lr){7-7}
+Best fixed & \num{0.139}* & \num{0.034} & \num{0.004} & \num{0.075} & \num{0.097}* & \num{0.07}**\\
+ & (\num{0.055}) & (\num{0.046}) & (\num{0.052}) & (\num{0.057}) & (\num{0.047}) & (\num{0.023})\\
+\addlinespace
+Best personalized & \num{0.043} & \num{-0.01} & \num{0.053} & \num{0.063} & \num{0.07} & \num{0.044}+\\
+ & (\num{0.051}) & (\num{0.045}) & (\num{0.049}) & (\num{0.06}) & (\num{0.053}) & (\num{0.023})\\
+\addlinespace
+Fixed - personalized & \num{0.096}* & \num{0.043} & \num{-0.05} & \num{0.012} & \num{0.027} & \num{0.026}\\
+ & (\num{0.045}) & (\num{0.044}) & (\num{0.046}) & (\num{0.043}) & (\num{0.043}) & (\num{0.02})\\
+\addlinespace
+Fixed - sub-optimal & \num{0.065} & \num{0.047} & \num{-0.009} & \num{0.026} & \num{0.06} & \num{0.038}*\\
+ & (\num{0.043}) & (\num{0.041}) & (\num{0.046}) & (\num{0.041}) & (\num{0.042}) & (\num{0.019})\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \footnotesize \textit{Note:} The sample is all respondents, $n = $ \num{2344}, split in to five equal folds. Estimates are average treatment effects as compared to the control on the post-test policy index measure of (1) the best learned fixed treatment, (2) the best learned personalized treatment, and differences in (3) the best fixed treatment over the best personalized treatment, and (4) the best fixed treatment as compared to all other non-control framings. Each column represents estimates within a different fold; the last colmn represents average estimates across folds. Estimates are produced from causal forests.  + $p < 0.1$, * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table*}

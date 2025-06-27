@@ -1,0 +1,28 @@
+\begin{table*}
+
+\caption{Treatment effect estimates for best fixed and best personalized arms, Democrats. \label{tab:best_framing_democrats}}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{lcc}
+\toprule
+ & Difference-in-means & Fold-wise causal forests\\
+\cmidrule(lr){2-2} \cmidrule(lr){3-3}
+Best fixed & \num{0.066} & \num{0.058}\\
+ & (\num{0.058}) & (\num{0.039})\\
+\addlinespace
+Best personalized & \num{0.105}+ & \num{0.073}\\
+ & (\num{0.059}) & (\num{0.046})\\
+\cmidrule(lr){2-2} \cmidrule(lr){3-3}
+\addlinespace
+Fixed - personalized & \num{-0.039} & \num{-0.014}\\
+ & (\num{0.082}) & (\num{0.04})\\
+\addlinespace
+Fixed - sub-optimal & \num{-0.072} & \num{0}\\
+ & (\num{0.045}) & (\num{0.032})\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \footnotesize \textit{Note:} The sample is Democrats, $n = $ \num{1095}. Estimates are average treatment effects as compared to the control on the post-test policy index measure of (1) the best learned fixed treatment, (2) the best learned personalized treatment, and differences in (3) the best fixed treatment over the best personalized treatment, and (4) the best fixed treatment as compared to all other non-control framings. Estimates are produced as simple difference in means across folds (column 1), and from combining fold-wise causal forest estimates, (column 2). + $p < 0.1$, * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table*}
