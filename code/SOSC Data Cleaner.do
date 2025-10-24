@@ -7,14 +7,14 @@ set more off
 
 * Downloading and saving additional demographic data
 
-import delimited "../Datasets/assignments_556e59b7-a2b0-402b-a29b-4bc811e68329", clear
-save "../Datasets/SOSC Connect Cloud Research Demographics", replace
+import delimited "../data/assignments_556e59b7-a2b0-402b-a29b-4bc811e68329", clear
+save "../data/SOSC Connect Cloud Research Demographics", replace
 clear
 
 * Importing data from Qualtrics and saving
 
-import delimited "../Datasets/SOSC 13300 Severson and Coleman Extension Survey_May 1, 2024_17.48.csv", varnames(1) clear 
-save "../Datasets/Severson and Coleman Main Raw Data", replace
+import delimited "../data/SOSC 13300 Severson and Coleman Extension Survey_May 1, 2024_17.48.csv", varnames(1) clear 
+save "../data/Severson and Coleman Main Raw Data", replace
 
 * Removing unnecessary variables and observations
 
@@ -25,7 +25,7 @@ keep if infcons == "I agree to participate in the research"
 
 * Merging Qualtrics and additional demographics
 
-merge 1:1 participantid using "../Datasets/SOSC Connect Cloud Research Demographics"
+merge 1:1 participantid using "../data/SOSC Connect Cloud Research Demographics"
 
 keep if countryofresidence == "United States"
 drop if missing(responseid)
@@ -310,7 +310,7 @@ summarize age party_id employment_status race_white income_level relationship co
 
 estpost summarize age party_id employment_status race_white income_level relationship college sex_id prosociality gastax carbtax treaty regcarb ideology scientific_confidence reward_consequence religiosity rel_freq economic_reasoning attention_check_1pass attention_check_2pass
 
-esttab using "../Datasets/summary_stats.csv", cells("count mean sd min max") nomtitle nonumber noobs replace
+esttab using "../data/summary_stats.csv", cells("count mean sd min max") nomtitle nonumber noobs replace
 
 
 gen unique_id = _n
@@ -325,5 +325,5 @@ drop if treatment_value == "6"
 
 * Saving the new dataset
 
-save "../Datasets/ssi-data-cleaned", replace
-outsheet using "../Datasets/ssi-data-cleaned.csv", comma replace
+save "../data/ssi-data-cleaned", replace
+outsheet using "../data/ssi-data-cleaned.csv", comma replace

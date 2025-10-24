@@ -1,3 +1,46 @@
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
 code/.ipynb_checkpoints
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+ssi3/
+*.egg-info/
+.pytest_cache/
+
+# R
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+# Stata
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# LaTeX intermediate files
+*.aux
+*.out
+*.toc
+*.synctex.gz
+
+# Virtual environments
 ssi3
+venv/
+env/
+ENV/
+
+# Raw data files (do not commit raw survey data)
+# Place raw data files in data/raw/ and document separately
+data/raw/
+**/assignments_*.csv
+**/*Survey*.csv
+**/*Cloud Research*.dta

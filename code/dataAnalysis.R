@@ -5,7 +5,7 @@ library(lmtest)
 library(kableExtra)
 library(dplyr)
 library(tidyr)
-library(estimatr)
+library(estimatr) # note that this needs to be updated after 1.0.6
 library(modelsummary)
 library(grf)
 
