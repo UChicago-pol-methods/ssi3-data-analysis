@@ -25,12 +25,16 @@ ssi3/
 
 # Jupyter
 .ipynb_checkpoints/
+.virtual_documents/
 
 # LaTeX intermediate files
 *.aux
 *.out
 *.toc
 *.synctex.gz
+
+# PDF outputs (can be regenerated)
+code/*.pdf
 
 # Virtual environments
 ssi3
